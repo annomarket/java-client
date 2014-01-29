@@ -4,24 +4,15 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.annomarket</groupId>
-  <artifactId>annomarket-client</artifactId>
-  <packaging>jar</packaging>
+  <artifactId>annomarket-parent</artifactId>
+  <packaging>pom</packaging>
   <version>0.9-SNAPSHOT</version>
-  <name>AnnoMarket.com REST Client API</name>
-  <url>https://annomarket.com</url>
 
-  <dependencies>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.3.1</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.4</version>
-    </dependency>
-  </dependencies>
+  <modules>
+    <module>library</module>
+    <module>cli</module>
+  </modules>
+
   <distributionManagement>
     <repository>
       <id>gate-release</id>
@@ -55,38 +46,6 @@
         <configuration>
           <encoding>UTF-8</encoding>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>2.2</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <shadedArtifactAttached>true</shadedArtifactAttached>
-              <shadedClassifierName>cli</shadedClassifierName>
-              <relocations>
-                <relocation>
-                  <pattern>org.apache.commons.io</pattern>
-                  <shadedPattern>com.annomarket.shade.commons-io</shadedPattern>
-                </relocation>
-                <relocation>
-                  <pattern>com.fasterxml.jackson</pattern>
-                  <shadedPattern>com.annomarket.shade.jackson</shadedPattern>
-                </relocation>
-              </relocations>
-              <transformers>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>com.annomarket.cli.Main</mainClass>
-                </transformer>
-              </transformers>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
