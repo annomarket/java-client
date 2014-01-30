@@ -49,7 +49,7 @@ public class JobDetails extends AbstractCommand {
     System.out.println("   Date created: " + j.dateCreated);
     if(j.state == JobState.COMPLETED) {
       System.out.println(" Date completed: " + j.dateCompleted);
-      System.out.println("    Exipry date: " + j.resultsAvailableUntil);
+      System.out.println("    Expiry date: " + j.resultsAvailableUntil);
     }
     if(j.timeUsed > 0) {
       System.out.println("Processing time: " + formatMs(j.timeUsed)
