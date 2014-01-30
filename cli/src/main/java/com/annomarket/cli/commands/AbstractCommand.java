@@ -80,7 +80,7 @@ public abstract class AbstractCommand implements Command {
       millis = millis % (60 * 1000);
     }
     long secs = millis / (1000);
-    millis = millis % (60 * 1000);
+    millis = millis % 1000;
     fmt.format("%02d.%03d", secs, millis);
     fmt.close();
     return buf.toString();
