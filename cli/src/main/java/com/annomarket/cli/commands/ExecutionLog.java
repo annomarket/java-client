@@ -28,7 +28,7 @@ import com.annomarket.job.LogMessage;
 
 public class ExecutionLog extends AbstractCommand {
   
-  private DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.FULL);
+  private DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG);
 
   public void run(RestClient client, String... args) throws Exception {
     if(args.length < 1) {
