@@ -215,6 +215,17 @@ public class RestClient {
    */
   private <T> T readResponseOrError(HttpURLConnection connection,
           TypeReference<T> responseType) throws RestClientException {
+    return readResponseOrError(connection, responseType, true);
+  }
+
+  /**
+   * Read a response or error message from the given connection,
+   * handling any 303 redirect responses if <code>followRedirects</code>
+   * is true.
+   */
+  private <T> T readResponseOrError(HttpURLConnection connection,
+          TypeReference<T> responseType, boolean followRedirects)
+          throws RestClientException {
     InputStream stream = null;
     try {
       stream = connection.getInputStream();
@@ -222,7 +233,7 @@ public class RestClient {
       if(responseCode == HttpURLConnection.HTTP_NO_CONTENT) {
         // successful response with no content
         return null;
-      } else if(responseCode < 300 || responseCode >= 400) {
+      } else if(responseCode < 300 || responseCode >= 400 || !followRedirects) {
         try {
           return MAPPER.readValue(stream, responseType);
         } finally {
@@ -414,7 +425,7 @@ public class RestClient {
       int responseCode = connection.getResponseCode();
       // make sure we read any response content
       readResponseOrError(connection, new TypeReference<JsonNode>() {
-      });
+      }, false);
       if(responseCode >= 300 && responseCode < 400) {
         // it was a redirect
         String redirectUrl = connection.getHeaderField("Location");
