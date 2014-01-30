@@ -18,6 +18,7 @@ package com.annomarket.cli.commands;
 
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import com.annomarket.client.RestClient;
@@ -62,6 +63,8 @@ public class ExecutionLog extends AbstractCommand {
   }
   
   private void printMessages(List<LogMessage> messages) {
+    // API returns the most recent message first
+    Collections.reverse(messages);
     for(LogMessage m : messages) {
       System.out.println(dateFormat.format(m.date.getTime()) + ": " + m.message);
     }
