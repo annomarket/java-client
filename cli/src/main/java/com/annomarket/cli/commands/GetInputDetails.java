@@ -60,7 +60,7 @@ public class GetInputDetails extends AbstractCommand {
         System.out.println("          Encoding: " + input.encoding);
       }
       if(input.mimeTypeOverride != null) {
-        System.out.println("MIME type override: " + input.type);
+        System.out.println("MIME type override: " + input.mimeTypeOverride);
       }
       if(input.fileExtensions != null) {
         System.out.println("   File extensions: " + input.fileExtensions);
