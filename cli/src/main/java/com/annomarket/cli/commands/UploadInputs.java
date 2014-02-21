@@ -77,8 +77,8 @@ public class UploadInputs extends AbstractCommand {
     for(; i < args.length; i++) {
       System.out.println("Processing " + args[i]);
       InputDetails input = null;
-      if(inputType == InputType.ARC) {
-        input = job.addARCInput(new File(args[i]), encoding, mimeTypeOverride, mimeTypes);
+      if(inputType == InputType.ARC || inputType == InputType.WARC) {
+        input = job.addARCInput(new File(args[i]), inputType, encoding, mimeTypeOverride, mimeTypes);
       } else {
         input = job.addArchiveInput(new File(args[i]), inputType, encoding, mimeTypeOverride, fileExtensions);
       }
@@ -92,7 +92,7 @@ public class UploadInputs extends AbstractCommand {
     System.err.println();
     System.err.println("Required switches:");
     System.err.println("  -type <type> : the type of the input files, must be one of");
-    System.err.println("                 ZIP, TAR, ARC, TWITTER_SEARCH, TWITTER_STREAM");
+    System.err.println("              ZIP, TAR, ARC, WARC, TWITTER_SEARCH, TWITTER_STREAM");
     System.err.println("Optional switches:");
     System.err.println("  -encoding : Character encoding to use when loading documents");
     System.err.println("              from the archive (if omitted, ARC files will use the");
@@ -101,9 +101,9 @@ public class UploadInputs extends AbstractCommand {
     System.err.println("  -mimeTypeOverride: The MIME type of the entries in the archive");
     System.err.println("              (if omitted, the type will be guessed from the file");
     System.err.println("              name extension and/or the ARC record mime type)");
-    System.err.println("  -mimeTypeFilters: (ARC inputs only) space-separated list of MIME");
-    System.err.println("              types - ARC entries that are not of one of these types");
-    System.err.println("              will be ignored");
+    System.err.println("  -mimeTypeFilters: (ARC and WARC inputs only) space-separated");
+    System.err.println("              list of MIME types - entries that are not of one of");
+    System.err.println("              these types will be ignored");
     System.err.println("  -fileExtensions: (ZIP and TAR inputs only) comma-separated list");
     System.err.println("              of file extensions - ZIP/TAR entries that do not have");
     System.err.println("              one of these extensions will be ignored.");
