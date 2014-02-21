@@ -41,17 +41,17 @@ public class InputDetails extends InputSummary {
 
   /**
    * Character encoding to use when reading entries from the archive. If
-   * <code>null</code>, the ARC entry headers will be used to guess an
-   * appropriate encoding for each entry (in the case or ARC files) or a
-   * default of UTF-8 will be used (for other formats).
+   * <code>null</code>, the (W)ARC entry headers will be used to guess
+   * an appropriate encoding for each entry (in the case of ARC or WARC
+   * files) or a default of UTF-8 will be used (for other formats).
    */
   public String encoding;
 
   /**
    * MIME type to use when parsing entries from the archive. If
    * <code>null</code> the appropriate type will be guessed based on the
-   * file name extension and (in the case of ARC files) the HTTP headers
-   * from the ARC entry.
+   * file name extension and (in the case of (W)ARC files) the HTTP
+   * headers from the (W)ARC entry.
    */
   public String mimeTypeOverride;
 
@@ -67,9 +67,9 @@ public class InputDetails extends InputSummary {
 
   /**
    * Space-separated list of MIME types used to filter the entries of
-   * interest from ARC input files. Entries whose MIME type does not
-   * match any of these will be ignored. Will be <code>null</code> for
-   * non-ARC inputs.
+   * interest from ARC and WARC input files. Entries whose MIME type
+   * does not match any of these will be ignored. Will be
+   * <code>null</code> for non-(W)ARC inputs.
    */
   public String mimeTypes;
 

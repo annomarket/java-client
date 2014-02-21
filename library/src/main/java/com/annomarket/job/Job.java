@@ -204,8 +204,8 @@ public class Job extends JobSummary {
    */
   public InputDetails addArchiveInput(File inputFile, InputType inputType,
           String encoding, String mimeTypeOverride, String fileExtensions) {
-    if(inputType == InputType.ARC) {
-      throw new RestClientException("For ARC files use addARCInput");
+    if(inputType == InputType.ARC || inputType == InputType.WARC) {
+      throw new RestClientException("For ARC and WARC files use addARCInput");
     }
     return addUploadInput(inputFile, inputType, encoding, mimeTypeOverride,
             fileExtensions, null);
@@ -242,18 +242,19 @@ public class Job extends JobSummary {
   public InputDetails addArchiveInput(String s3Location, String accessKeyId,
           String secretKey, InputType inputType, String encoding,
           String mimeTypeOverride, String fileExtensions) {
-    if(inputType == InputType.ARC) {
-      throw new RestClientException("For ARC files use addARCInput");
+    if(inputType == InputType.ARC || inputType == InputType.WARC) {
+      throw new RestClientException("For ARC and WARC files use addARCInput");
     }
     return addS3Input(s3Location, accessKeyId, secretKey, inputType, encoding,
             mimeTypeOverride, fileExtensions, null);
   }
 
   /**
-   * Upload a local Internet Archive ARC file as input to this job.
+   * Upload a local Internet Archive ARC or WARC file as input to this
+   * job.
    * 
    * @param inputFile the local file to upload
-   * @param inputType the type of the input
+   * @param inputType the type of the input (must be ARC or WARC)
    * @param encoding character encoding to use when reading entries from
    *          the archive. If <code>null</code>, the ARC entry headers
    *          will be used to guess an appropriate encoding for each
@@ -267,15 +268,19 @@ public class Job extends JobSummary {
    *          MIME type does not match any of these will be ignored.
    * @return details of the newly-created input specification.
    */
-  public InputDetails addARCInput(File inputFile, String encoding,
-          String mimeTypeOverride, String mimeTypes) {
-    return addUploadInput(inputFile, InputType.ARC, encoding, mimeTypeOverride,
+  public InputDetails addARCInput(File inputFile, InputType inputType,
+          String encoding, String mimeTypeOverride, String mimeTypes) {
+    if(inputType != InputType.ARC && inputType != InputType.WARC) {
+      throw new RestClientException(
+              "addArcInput only applicable to ARC and WARC inputs");
+    }
+    return addUploadInput(inputFile, inputType, encoding, mimeTypeOverride,
             null, mimeTypes);
   }
 
   /**
-   * Point to an Internet Archive ARC file on Amazon S3 as input to this
-   * job.
+   * Point to an Internet Archive or WARC file on Amazon S3 as input to
+   * this job.
    * 
    * @param s3Location a "URL" of the form
    *          <code>s3://bucketname/key</code> denoting the target
@@ -283,25 +288,30 @@ public class Job extends JobSummary {
    * @param accessKeyId an AWS access key ID (typically a limited IAM
    *          user) with permission to get the specified object
    * @param secretKey the corresponding AWS secret key.
-   * @param inputType the type of the input
+   * @param inputType the type of the input (must be ARC or WARC)
    * @param encoding character encoding to use when reading entries from
-   *          the archive. If <code>null</code>, the ARC entry headers
-   *          will be used to guess an appropriate encoding for each
-   *          entry.
+   *          the archive. If <code>null</code>, the (W)ARC entry
+   *          headers will be used to guess an appropriate encoding for
+   *          each entry.
    * @param mimeTypeOverride the MIME type to use when parsing entries
    *          from the archive. If <code>null</code> the appropriate
    *          type will be guessed based on the file name extension and
-   *          HTTP headers from the ARC entry.
+   *          HTTP headers from the (W)ARC entry.
    * @param mimeTypes space-separated list of MIME types used to filter
-   *          the entries of interest from the ARC file. Entries whose
-   *          MIME type does not match any of these will be ignored.
+   *          the entries of interest from the (W)ARC file. Entries
+   *          whose MIME type does not match any of these will be
+   *          ignored.
    * @return details of the newly-created input specification.
    */
   public InputDetails addARCInput(String s3Location, String accessKeyId,
-          String secretKey, String encoding, String mimeTypeOverride,
-          String mimeTypes) {
-    return addS3Input(s3Location, accessKeyId, secretKey, InputType.ARC,
-            encoding, mimeTypeOverride, null, mimeTypes);
+          String secretKey, InputType inputType, String encoding,
+          String mimeTypeOverride, String mimeTypes) {
+    if(inputType != InputType.ARC && inputType != InputType.WARC) {
+      throw new RestClientException(
+              "addArcInput only applicable to ARC and WARC inputs");
+    }
+    return addS3Input(s3Location, accessKeyId, secretKey, inputType, encoding,
+            mimeTypeOverride, null, mimeTypes);
   }
 
   /**

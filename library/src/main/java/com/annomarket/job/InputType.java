@@ -36,12 +36,23 @@ public enum InputType {
    * Internet Archive ARC file.
    */
   ARC,
+  
+  /**
+   * Internet Archive WARC file.
+   */
+  WARC,
 
   /**
    * Specific records fetched from remote ARC files, typically from
    * Common Crawl.
    */
   ARC_RECORDS,
+
+  /**
+   * Specific records fetched from remote WARC files, typically from
+   * Common Crawl.
+   */
+  WARC_RECORDS,
 
   /**
    * JSON in the Twitter "search" format (a single top-level JSON object
