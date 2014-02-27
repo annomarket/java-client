@@ -146,6 +146,57 @@ public class RestClient {
       throw new RestClientException(e);
     }
   }
+  
+  /**
+   * Make an API request and return the raw data from the response
+   * as an InputStream.
+   * 
+   * @param target the URL to request (relative URLs will resolve
+   *          against the {@link #getBaseUrl() base URL}).
+   * @param method the request method (GET, POST, DELETE, etc.)
+   * @param requestBody the object that should be serialized to JSON as
+   *          the request body. If <code>null</code> no request body is
+   *          sent
+   * @param extraHeaders any additional HTTP headers, specified as an
+   *          alternating sequence of header names and values
+   * @return for a successful response, the response stream,
+   *         or <code>null</code> for a 201 response
+   * @throws RestClientException if an exception occurs during
+   *           processing, or the server returns a 4xx or 5xx error
+   *           response (in which case the response JSON message will be
+   *           available as a {@link JsonNode} in the exception).
+   */
+  public InputStream requestForStream(String target, String method,
+          Object requestBody, String... extraHeaders) throws RestClientException {
+    try {
+      HttpURLConnection connection =
+              sendRequest(target, method, requestBody, extraHeaders);
+      int responseCode = connection.getResponseCode();
+      if(responseCode == HttpURLConnection.HTTP_NO_CONTENT) {
+        // successful response with no content
+        return null;
+      } else if(responseCode >= 400) {
+        readError(connection);
+        return null; // not reachable, readError always throws exception
+      } else if(responseCode >= 300) {
+        // redirect - all redirects we care about from the AnnoMarket
+        // APIs are 303. We have to follow them manually to make
+        // authentication work properly.
+        String location = connection.getHeaderField("Location");
+        // consume body
+        InputStream stream = connection.getInputStream();
+        IOUtils.copy(stream, new NullOutputStream());
+        IOUtils.closeQuietly(stream);
+        // follow the redirect
+        return requestForStream(location, method, requestBody, extraHeaders);
+      } else {
+        return connection.getInputStream();
+      }
+    } catch(IOException e) {
+      throw new RestClientException(e);
+    }
+    
+  }
 
   /**
    * Make an API request and parse the JSON response, using the response
@@ -190,12 +241,14 @@ public class RestClient {
     connection.setRequestMethod(method);
     connection.setInstanceFollowRedirects(false);
     connection.setRequestProperty("Authorization", authorizationHeader);
-    connection.setRequestProperty("Accept", "application/json");
+    boolean sentAccept = false;
     if(extraHeaders != null) {
       for(int i = 0; i < extraHeaders.length; i++) {
+        if("Accept".equals(extraHeaders[i])) sentAccept = true;
         connection.setRequestProperty(extraHeaders[i], extraHeaders[++i]);
       }
     }
+    if(!sentAccept) connection.setRequestProperty("Accept", "application/json");
     if(requestBody != null) {
       connection.setDoOutput(true);
       connection.setRequestProperty("Content-Type", "application/json");
@@ -228,12 +281,14 @@ public class RestClient {
           throws RestClientException {
     InputStream stream = null;
     try {
-      stream = connection.getInputStream();
       int responseCode = connection.getResponseCode();
       if(responseCode == HttpURLConnection.HTTP_NO_CONTENT) {
         // successful response with no content
         return null;
-      } else if(responseCode < 300 || responseCode >= 400 || !followRedirects) {
+      }
+      stream = connection.getInputStream();
+
+      if(responseCode < 300 || responseCode >= 400 || !followRedirects) {
         try {
           return MAPPER.readValue(stream, responseType);
         } finally {
@@ -264,16 +319,15 @@ public class RestClient {
           Object responseObject) throws RestClientException {
     InputStream stream = null;
     try {
-      stream = connection.getInputStream();
       if(connection.getResponseCode() == HttpURLConnection.HTTP_NO_CONTENT) {
         // successful response with no content
         return;
-      } else {
-        try {
-          MAPPER.readerForUpdating(responseObject).readValue(stream);
-        } finally {
-          stream.close();
-        }
+      }
+      stream = connection.getInputStream();
+      try {
+        MAPPER.readerForUpdating(responseObject).readValue(stream);
+      } finally {
+        stream.close();
       }
     } catch(Exception e) {
       readError(connection);
