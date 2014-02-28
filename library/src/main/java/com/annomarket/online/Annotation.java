@@ -3,6 +3,7 @@ package com.annomarket.online;
 import java.util.HashMap;
 import java.util.Map;
 
+
 import com.annomarket.common.ApiObject;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonCreator;

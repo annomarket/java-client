@@ -18,6 +18,7 @@ package com.annomarket.client;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+
 /**
  * Exception representing any problem communicating with the AnnoMarket
  * REST API. In cases where the server could successfully be contacted

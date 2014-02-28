@@ -16,6 +16,7 @@
  */
 package com.annomarket.job;
 
+
 import com.annomarket.common.ApiObject;
 import com.fasterxml.jackson.core.type.TypeReference;
 
