@@ -18,6 +18,7 @@ package com.annomarket.job;
 
 import java.net.URL;
 
+
 import com.annomarket.common.ApiObject;
 import com.fasterxml.jackson.annotation.JsonCreator;
 

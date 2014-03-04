@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The University of Sheffield
+ * Copyright (c) 2014 The University of Sheffield, Ontotext AD
  *
  * This file is part of the AnnoMarket.com REST client library, and is
  * licensed under the Apache License, Version 2.0 (the "License");
@@ -14,26 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.annomarket.common;
+package com.annomarket.online;
 
-/**
- * "Struct" representing a pricing structure for a shop item or job.
- * 
- * @author Ian Roberts
- */
-public class Prices {
-  /**
-   * One-off setup price, charged when the job is purchased or reset.
-   */
-  public double setup;
+public class OnlineApiException extends Exception {
 
-  /**
-   * Charge per compute hour consumed by the job.
-   */
-  public double hour;
+  public OnlineApiException(String msg, Throwable cause) {
+    super(msg, cause);
+  }
 
-  /**
-   * Charge per MiB (1048576 bytes) of data processed.
-   */
-  public double mib;
 }

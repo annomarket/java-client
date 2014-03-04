@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The University of Sheffield
+ * Copyright (c) 2014 The University of Sheffield, Ontotext AD
  *
  * This file is part of the AnnoMarket.com REST client library, and is
  * licensed under the Apache License, Version 2.0 (the "License");
@@ -14,26 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.annomarket.common;
+package com.annomarket.online;
 
 /**
- * "Struct" representing a pricing structure for a shop item or job.
+ * Enumeration of the valid response types accepted by the online API.
  * 
  * @author Ian Roberts
  */
-public class Prices {
-  /**
-   * One-off setup price, charged when the job is purchased or reset.
-   */
-  public double setup;
+public enum ResponseFormat {
+  JSON("application/gate+json"),
+
+  GATE_XML("application/gate+xml");
 
   /**
-   * Charge per compute hour consumed by the job.
+   * The HTTP "Accept" header corresponding to this response format.
    */
-  public double hour;
+  public final String acceptHeader;
 
-  /**
-   * Charge per MiB (1048576 bytes) of data processed.
-   */
-  public double mib;
+  private ResponseFormat(String acceptHeader) {
+    this.acceptHeader = acceptHeader;
+  }
+
 }
