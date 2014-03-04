@@ -16,7 +16,6 @@
  */
 package com.annomarket.common;
 
-
 import com.annomarket.client.RestClient;
 import com.fasterxml.jackson.annotation.JacksonInject;
 

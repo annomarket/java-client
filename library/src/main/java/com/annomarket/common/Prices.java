@@ -26,12 +26,12 @@ public class Prices {
    * One-off setup price, charged when the job is purchased or reset.
    */
   public double setup;
-  
+
   /**
    * Charge per compute hour consumed by the job.
    */
   public double hour;
-  
+
   /**
    * Charge per MiB (1048576 bytes) of data processed.
    */
