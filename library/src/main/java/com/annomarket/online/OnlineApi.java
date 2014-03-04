@@ -64,7 +64,7 @@ public class OnlineApi {
 	 */
 	public AnnotatedDocument annotateDocument(String documentText, SupportedMimeType documentMimeType) throws OnlineApiException {
 		OnlineServiceRequest rq = new OnlineServiceRequest(documentText, documentMimeType, null);
-		return processRequest(rq, false);
+		return processRequest(rq, true);
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class OnlineApi {
 	 */
 	public AnnotatedDocument annotateDocumentFromUrl(URL documentUrl, SupportedMimeType documentMimeType) throws OnlineApiException {
 		OnlineServiceRequest rq = new OnlineServiceRequest(documentUrl, documentMimeType, null);
-		return processRequest(rq, false);
+		return processRequest(rq, true);
 	}
 
 

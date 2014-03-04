@@ -25,6 +25,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.zip.GZIPInputStream;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -296,7 +297,12 @@ public class RestClient {
 				// successful response with no content
 				return null;
 			}
-			stream = connection.getInputStream();
+			String encoding = connection.getContentEncoding();
+			if("gzip".equalsIgnoreCase(encoding)) {
+				stream = new GZIPInputStream(connection.getInputStream());
+			} else {
+				stream = connection.getInputStream();
+			}
 
 			if(responseCode < 300 || responseCode >= 400 || !followRedirects) {
 				try {
@@ -353,7 +359,13 @@ public class RestClient {
 			throws RestClientException {
 		InputStream stream;
 		try {
-			stream = connection.getErrorStream();
+			String encoding = connection.getContentEncoding();
+			if("gzip".equalsIgnoreCase(encoding)) {
+				stream = new GZIPInputStream(connection.getInputStream());
+			} else {
+				stream = connection.getInputStream();
+			}
+			
 			InputStreamReader reader = new InputStreamReader(stream, "UTF-8");
 
 			try {
@@ -363,7 +375,7 @@ public class RestClient {
 				} else if (connection.getContentType().contains("xml")) {
 					errorNode = XML_MAPPER.readTree(stream);
 				}
-				
+
 				throw new RestClientException("Server returned response code "
 						+ connection.getResponseCode(), errorNode);
 
