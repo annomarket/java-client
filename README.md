@@ -12,6 +12,6 @@ Documentation can be found on [the wiki][2]:
 
   [1]: https://annomarket.com/info/help/rest-api.html
   [2]: https://github.com/annomarket/java-client/wiki
-  [3]: https://github.com/annomarket/java-client/wiki/Client-Library
+  [3]: https://github.com/annomarket/java-client/wiki/Client-Library-Usage-Guide
   [4]: http://annomarket.github.io/java-client/javadoc/
-  [5]: https://github.com/annomarket/java-client/wiki/CommandLine
+  [5]: https://github.com/annomarket/java-client/wiki/Command-Line-Tool-Usage-Guide
