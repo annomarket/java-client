@@ -3,10 +3,10 @@ AnnoMarket.com client library
 
 A Java client library and command-line tool for the [AnnoMarket.com REST API][1].
 
-Documentation can be found on [the wiki][2].
-
-- [Client library documentation][3] and [JavaDocs][4]
-- [Command line tool][5]
+Documentation can be found on [the wiki][2]:
+- [Client library usage guide][3] 
+- [Client library JavaDocs][4]
+- [Command line tool usage guide][5]
 
 
 
