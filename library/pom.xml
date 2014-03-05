@@ -5,14 +5,14 @@
   <parent>
     <groupId>com.annomarket</groupId>
     <artifactId>annomarket-parent</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>annomarket-client</artifactId>
   <packaging>jar</packaging>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.2-SNAPSHOT</version>
   <name>AnnoMarket.com REST Client API</name>
   <url>https://annomarket.com</url>
 
