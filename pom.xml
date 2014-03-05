@@ -6,7 +6,7 @@
   <groupId>com.annomarket</groupId>
   <artifactId>annomarket-parent</artifactId>
   <packaging>pom</packaging>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.1</version>
 
   <modules>
     <module>library</module>
