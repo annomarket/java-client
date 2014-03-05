@@ -60,10 +60,7 @@ public class OnlineServiceRequest {
    * 
    * @param document the content to process.
    * @param type the MIME type that the service should use to parse the
-   *          document. Note that only text-based types will work when
-   *          providing a document in the service request - binary types
-   *          such as PDF, FastInfoset and MS Word are only supported
-   *          when annotating from a URL.
+   *          document.
    * @param annotationSelectors annotations to return. Leave as
    *          <code>null</code> to use the default selectors recommended
    *          by the pipeline provider.

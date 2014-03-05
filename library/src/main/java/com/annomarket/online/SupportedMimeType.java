@@ -17,10 +17,7 @@
 package com.annomarket.online;
 
 /**
- * Enumeration of the MIME types supported by the online API. Note that
- * only text-based types will work when the document content is supplied
- * as part of the request. Binary types such as PDF, FastInfoset and MS
- * Word will work only when annotating a document from a URL.
+ * Enumeration of the MIME types supported by the online API.
  * 
  * @author Petar Kostov
  */
@@ -33,10 +30,7 @@ public enum SupportedMimeType {
   PUBMED("text/x-pubmed"),
   COCHRANE("text/x-cochrane"),
   MEDIAWIKI("text/x-mediawiki"),
-  FASTINFOSET("application/fastinfoset"),
-  TWITTER_JSON("text/x-json-twitter"),
-  PDF("application/pdf"),
-  WORD("application/word");
+  TWITTER_JSON("text/x-json-twitter");
 
   private SupportedMimeType(String type) {
     this.value = type;
