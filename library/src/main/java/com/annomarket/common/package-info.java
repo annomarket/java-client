@@ -1,5 +1,5 @@
 /**
- * Common classes used by both the shop and job APIs.
+ * Common classes used by all the APIs.
  */
 package com.annomarket.common;
 

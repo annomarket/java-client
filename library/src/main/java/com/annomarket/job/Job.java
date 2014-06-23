@@ -32,11 +32,14 @@ import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.io.IOUtils;
 
 import com.annomarket.client.RestClientException;
+import com.annomarket.common.InputType;
 import com.annomarket.common.Prices;
+import com.annomarket.data.DataBundle;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
 /**
  * Full details of an annotation job, and methods to configure and
  * control the job. Note that while many of the fields on this object
@@ -121,6 +124,13 @@ public class Job extends JobSummary {
    * sub-tasks has not yet been determined.
    */
   public double progress;
+
+  /**
+   * URL of the data bundle containing the results of the most recent
+   * run of this job. May be null if the job has not completed, or if
+   * its result bundle has already been deleted.
+   */
+  public String resultBundle;
 
   /**
    * Change the name of this job.
@@ -580,7 +590,9 @@ public class Job extends JobSummary {
   }
 
   /**
-   * Retrieve all the result files produced by this job.
+   * Retrieve the report files produced by this job. The actual results
+   * of the job will be stored as a data bundle, available via the
+   * {@link #resultBundle()} method.
    * 
    * @return a list of results, call <code>urlToDownload</code> on each
    *         result to get a (time-limited) URL from which the file can
@@ -588,6 +600,16 @@ public class Job extends JobSummary {
    */
   public List<JobResult> results() {
     return client.get(url + "/results", new TypeReference<List<JobResult>>() {
+    });
+  }
+
+  /**
+   * Retrieve the data bundle containing this job's results.
+   * 
+   * @return a data bundle containing this job's results.
+   */
+  public DataBundle resultBundle() {
+    return client.get(resultBundle, new TypeReference<DataBundle>() {
     });
   }
 

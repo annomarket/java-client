@@ -14,40 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.annomarket.job;
+package com.annomarket.data;
+
+import java.net.URL;
 
 
 import com.annomarket.common.ApiObject;
-import com.annomarket.common.InputType;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 /**
- * Summary information about an input specification.
+ * A single result file produced by a job. Call {@link #urlToDownload()}
+ * to get a URL from which the file can be downloaded.
  * 
  * @author Ian Roberts
  */
-public class InputSummary extends ApiObject {
-  /**
-   * Detail URL.
-   */
-  public String url;
+public class BundleEntry extends ApiObject {
+  @JsonCreator
+  public BundleEntry(URL url) {
+    this.url = url;
+  }
+
+  public URL url;
 
   /**
-   * The type of this input (ZIP, TAR, ARC, ARC_RECORDS, TWITTER_SEARCH
-   * or TWITTER_STREAM)
+   * Generate a URL from which the file can be downloaded. This URL
+   * should be accessed immediately as it is time-limited and will
+   * expire if not used. If the URL has expired, simply call this method
+   * again as a fresh URL is generated every time.
+   * 
+   * @return downloadable URL.
    */
-  public InputType type;
-
-  /**
-   * S3 location of the input data.
-   */
-  public String location;
-
-  /**
-   * Fetch the full details of this input specification from the server.
-   */
-  public InputDetails details() {
-    return client.get(url, new TypeReference<InputDetails>() {
-    });
+  public URL urlToDownload() {
+    return client.getRedirect(url);
   }
 }
