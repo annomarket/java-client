@@ -14,45 +14,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.annomarket.cli.commands;
+package com.annomarket.cli.commands.data;
 
 import java.util.Formatter;
 import java.util.List;
 
+import com.annomarket.cli.commands.AbstractCommand;
 import com.annomarket.client.RestClient;
-import com.annomarket.job.Job;
-import com.annomarket.job.JobManager;
-import com.annomarket.job.JobState;
-import com.annomarket.job.JobSummary;
+import com.annomarket.data.DataBundleSummary;
+import com.annomarket.data.DataManager;
 
-public class ListJobs extends AbstractCommand {
+public class ListBundles extends AbstractCommand {
 
   public void run(RestClient client, String... args) throws Exception {
-    JobManager mgr = new JobManager(client);
-    JobState[] states = new JobState[args.length];
-    for(int i = 0; i < args.length; i++) {
-      try {
-        states[i] = JobState.valueOf(args[i]);
-      } catch(IllegalArgumentException e) {
-        System.err.println("Invalid job state " + args[i]);
-        System.exit(1);
-      }
-    }
-    List<JobSummary> jobs = mgr.listJobs(states);
-    if(jobs == null || jobs.isEmpty()) {
-      System.out.println("No jobs found");
+    DataManager mgr = new DataManager(client);
+    List<DataBundleSummary> bundles = mgr.listBundles();
+    if(bundles == null || bundles.isEmpty()) {
+      System.out.println("No data bundles found");
     } else {
-      // ID (6 cols), Name (32 cols), price (rest)
-      System.out.println("    ID  Name                                      State");
+      // ID (6 cols), Name (40 cols), state (rest)
+      System.out.println("    ID  Name                                      Notes");
       System.out.println("----------------------------------------------------------");
       Formatter f = new Formatter(System.out);
-      for(JobSummary summ : jobs) {
-        Job j = summ.details();
-        String name = j.name;
+      for(DataBundleSummary summ : bundles) {
+        String name = summ.name;
         if(name.length() > 40) {
           name = name.substring(0,37) + "...";
         }
-        f.format("%6d  %-40s  %s%n", j.id, name, j.state);
+        String notes = "";
+        if(!summ.closed) {
+          notes = "Open for uploads";
+        } else if(!summ.downloadable) {
+          notes = "Not directly downloadable";
+        }
+        f.format("%6d  %-40s  %s%n", summ.id, name, notes);
       }
       f.close();
     }

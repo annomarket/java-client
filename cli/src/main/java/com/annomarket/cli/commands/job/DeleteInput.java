@@ -14,43 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.annomarket.cli.commands;
+package com.annomarket.cli.commands.job;
 
-import java.util.List;
-
+import com.annomarket.cli.commands.AbstractCommand;
 import com.annomarket.client.RestClient;
-import com.annomarket.job.InputSummary;
-import com.annomarket.job.Job;
+import com.annomarket.job.InputDetails;
 import com.annomarket.job.JobManager;
 
-public class ListInputs extends AbstractCommand {
+public class DeleteInput extends AbstractCommand {
 
   public void run(RestClient client, String... args) throws Exception {
     if(args.length < 1) {
-      System.err.println("Usage: list-inputs <jobid>");
-      System.exit(1);
-    }
-    long jobId = -1;
-    try {
-      jobId = Long.parseLong(args[0]);
-    } catch(NumberFormatException e) {
-      System.err.println("Job ID must be a valid number");
+      System.err.println("Usage: delete-input <inputurl>");
       System.exit(1);
     }
 
     JobManager mgr = new JobManager(client);
-    Job j = mgr.getJob(jobId);
-    List<InputSummary> inputs = j.listInputs();
-    if(inputs == null || inputs.isEmpty()) {
-      System.out.println("No inputs found");
-    } else {
-      System.out.println(inputs.size() + " input(s) found");
-      for(InputSummary i : inputs) {
-        System.out.println();
-        System.out.println("Detail URL: " + i.url);
-        System.out.println("      Type: " + (i.type == null ? "CommonCrawl search" : i.type));
-      }
-    }
+    InputDetails input = mgr.getInputDetails(args[0]);
+    input.delete();
+    System.out.println("Input deleted successfully");
   }
 
 }

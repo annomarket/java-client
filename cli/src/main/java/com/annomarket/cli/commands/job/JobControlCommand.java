@@ -14,24 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.annomarket.cli.commands;
+package com.annomarket.cli.commands.job;
 
+import com.annomarket.cli.commands.AbstractCommand;
 import com.annomarket.client.RestClient;
+import com.annomarket.job.Job;
 import com.annomarket.job.JobManager;
-import com.annomarket.job.Output;
 
-public class DeleteOutput extends AbstractCommand {
+public abstract class JobControlCommand extends AbstractCommand {
 
   public void run(RestClient client, String... args) throws Exception {
     if(args.length < 1) {
-      System.err.println("Usage: delete-output <outputurl>");
+      System.err.println("Usage: " + commandName() + " <jobid>");
+      System.exit(1);
+    }
+    long jobId = -1;
+    try {
+      jobId = Long.parseLong(args[0]);
+    } catch(NumberFormatException e) {
+      System.err.println("Job ID must be a valid number");
       System.exit(1);
     }
 
     JobManager mgr = new JobManager(client);
-    Output output = mgr.getOutputDetails(args[0]);
-    output.delete();
-    System.out.println("Output deleted successfully");
+    Job job = mgr.getJob(jobId);
+    controlJob(job);
   }
 
+  protected abstract String commandName();
+  
+  protected abstract void controlJob(Job j);
 }

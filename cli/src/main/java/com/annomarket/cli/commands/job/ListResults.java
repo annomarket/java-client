@@ -14,20 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.annomarket.cli.commands;
+package com.annomarket.cli.commands.job;
+
+import java.util.List;
 
 import com.annomarket.job.Job;
+import com.annomarket.job.JobResult;
 
-public class StartJob extends JobControlCommand {
+public class ListResults extends JobControlCommand {
 
   @Override
   protected String commandName() {
-    return "start-job";
+    return "list-results";
   }
 
   @Override
   protected void controlJob(Job j) {
-    j.start();
+    List<JobResult> results = j.results();
+    if(results == null | results.isEmpty()) {
+      System.err.println("No results found");
+      System.exit(1);
+    }
+    for(JobResult res : results) {
+      System.out.println(res.url);
+    }
   }
 
 }

@@ -14,42 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.annomarket.cli.commands;
+package com.annomarket.cli.commands.job;
 
+import com.annomarket.cli.commands.AbstractCommand;
 import com.annomarket.client.RestClient;
-import com.annomarket.shop.Item;
-import com.annomarket.shop.Shop;
+import com.annomarket.job.JobManager;
+import com.annomarket.job.Output;
 
-public class ItemDetails extends AbstractCommand {
+public class DeleteOutput extends AbstractCommand {
 
   public void run(RestClient client, String... args) throws Exception {
     if(args.length < 1) {
-      System.err.println("Usage: item-details <itemid>");
+      System.err.println("Usage: delete-output <outputurl>");
       System.exit(1);
     }
-    long itemId = -1;
-    try {
-      itemId = Long.parseLong(args[0]);
-    } catch(NumberFormatException e) {
-      System.err.println("Item ID must be a valid number");
-      System.exit(1);
-    }
-    Shop shop = new Shop(client);
-    Item i = shop.getItem(itemId);
-    renderItem(i);
-  }
 
-  private void renderItem(Item i) {
-    System.out.println("   ID: " + i.id);
-    System.out.println(" Name: " + i.name);
-    System.out.println("Price: " + formatPrices(i.price));
-    System.out.println();
-    System.out.println("Description");
-    System.out.println("-----------");
-    System.out.println();
-    System.out.println(i.shortDescription);
+    JobManager mgr = new JobManager(client);
+    Output output = mgr.getOutputDetails(args[0]);
+    output.delete();
+    System.out.println("Output deleted successfully");
   }
-  
-  
 
 }

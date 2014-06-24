@@ -14,13 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.annomarket.cli.commands;
+package com.annomarket.cli.commands.job;
 
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+import com.annomarket.cli.commands.AbstractCommand;
 import com.annomarket.client.RestClient;
 import com.annomarket.job.Job;
 import com.annomarket.job.JobManager;

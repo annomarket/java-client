@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.annomarket.cli.commands;
+package com.annomarket.cli.commands.job;
 
 import com.annomarket.job.Job;
 
-public class ResumeJob extends JobControlCommand {
+public class StartJob extends JobControlCommand {
 
   @Override
   protected String commandName() {
-    return "resume-job";
+    return "start-job";
   }
 
   @Override
   protected void controlJob(Job j) {
-    j.resume();
+    j.start();
   }
 
 }

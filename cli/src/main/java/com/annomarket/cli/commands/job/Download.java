@@ -14,24 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.annomarket.cli.commands;
+package com.annomarket.cli.commands.job;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+
+import org.apache.commons.io.FileUtils;
+
+import com.annomarket.cli.commands.AbstractCommand;
 import com.annomarket.client.RestClient;
-import com.annomarket.job.InputDetails;
-import com.annomarket.job.JobManager;
+import com.annomarket.client.RestClientException;
+import com.annomarket.job.JobResult;
 
-public class DeleteInput extends AbstractCommand {
+public class Download extends AbstractCommand {
 
   public void run(RestClient client, String... args) throws Exception {
     if(args.length < 1) {
-      System.err.println("Usage: delete-input <inputurl>");
-      System.exit(1);
+      System.err.println("Usage: download <URL>");
+      JobResult res = new JobResult(new URL(args[0]));
+      res.setClient(client);
+      String path = res.url.getPath();
+      String filename = path.substring(path.lastIndexOf("/") + 1);
+      System.out.println(filename);
+      File f = new File(filename);
+      try {
+        FileUtils.copyURLToFile(res.urlToDownload(), f);
+      } catch(IOException e) {
+        throw new RestClientException("Error downloading " + res.url);
+      }
     }
-
-    JobManager mgr = new JobManager(client);
-    InputDetails input = mgr.getInputDetails(args[0]);
-    input.delete();
-    System.out.println("Input deleted successfully");
   }
 
 }

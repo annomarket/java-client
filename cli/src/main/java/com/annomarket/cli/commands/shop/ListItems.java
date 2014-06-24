@@ -14,11 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.annomarket.cli.commands;
+package com.annomarket.cli.commands.shop;
 
 import java.util.Formatter;
 import java.util.List;
 
+import com.annomarket.cli.commands.AbstractCommand;
 import com.annomarket.client.RestClient;
 import com.annomarket.shop.Item;
 import com.annomarket.shop.Shop;

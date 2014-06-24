@@ -14,33 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.annomarket.cli.commands;
+package com.annomarket.cli.commands.data;
 
+import com.annomarket.cli.commands.AbstractCommand;
 import com.annomarket.client.RestClient;
-import com.annomarket.job.Job;
-import com.annomarket.job.JobManager;
+import com.annomarket.data.DataBundle;
+import com.annomarket.data.DataManager;
 
-public abstract class JobControlCommand extends AbstractCommand {
+public class DeleteBundle extends AbstractCommand {
 
   public void run(RestClient client, String... args) throws Exception {
     if(args.length < 1) {
-      System.err.println("Usage: " + commandName() + " <jobid>");
+      System.err.println("Usage: delete-bundle <bundleid or url>");
       System.exit(1);
     }
-    long jobId = -1;
+    DataManager mgr = new DataManager(client);
+    DataBundle b = null;
     try {
-      jobId = Long.parseLong(args[0]);
+      b = mgr.getBundle(Long.parseLong(args[0]));
     } catch(NumberFormatException e) {
-      System.err.println("Job ID must be a valid number");
-      System.exit(1);
+      // assume it's a URL
+      b = mgr.getBundle(args[0]);
+    }
+    if(b == null) {
+      System.out
+              .println("Please specify either a numeric bundle ID or a valid bundle URL.");
     }
 
-    JobManager mgr = new JobManager(client);
-    Job job = mgr.getJob(jobId);
-    controlJob(job);
+    b.delete();
+    System.out.println("Bundle " + b.id + " deleted");
   }
-
-  protected abstract String commandName();
-  
-  protected abstract void controlJob(Job j);
 }

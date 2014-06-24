@@ -14,51 +14,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.annomarket.cli.commands;
+package com.annomarket.cli.commands.shop;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
+import com.annomarket.cli.commands.AbstractCommand;
 import com.annomarket.client.RestClient;
-import com.annomarket.job.Job;
 import com.annomarket.shop.Item;
 import com.annomarket.shop.Shop;
 
-public class ReserveJob extends AbstractCommand {
+public class ItemDetails extends AbstractCommand {
 
   public void run(RestClient client, String... args) throws Exception {
     if(args.length < 1) {
-      System.err.println("Usage: reserve-job <itemid or URL> [\"Job name\"]");
+      System.err.println("Usage: item-details <itemid>");
       System.exit(1);
     }
     long itemId = -1;
-    String url = null;
     try {
       itemId = Long.parseLong(args[0]);
     } catch(NumberFormatException e) {
-      try {
-        url = new URL(args[0]).toExternalForm();
-      } catch(MalformedURLException mue) {
-        System.err.println("Item argument must be a valid number (item ID) or URL");
-        System.exit(1);
-      }
+      System.err.println("Item ID must be a valid number");
+      System.exit(1);
     }
     Shop shop = new Shop(client);
-    Item i = null;
-    if(url == null) {
-      i = shop.getItem(itemId);
-    } else {
-      i = shop.getItem(url);
-    }
-    Job job = i.reserve(Boolean.getBoolean("annomarket.payment.allowed"));
-    System.out.println("Successfully reserved job.");
-    // rename if a name was specified
-    if(args.length >= 2) {
-      job.rename(args[1]);
-    }
-    System.out.println();
-    System.out.println("  ID: " + job.id);
-    System.out.println("Name: " + job.name);
+    Item i = shop.getItem(itemId);
+    renderItem(i);
   }
+
+  private void renderItem(Item i) {
+    System.out.println("   ID: " + i.id);
+    System.out.println(" Name: " + i.name);
+    System.out.println("Price: " + formatPrices(i.price));
+    System.out.println();
+    System.out.println("Description");
+    System.out.println("-----------");
+    System.out.println();
+    System.out.println(i.shortDescription);
+  }
+  
+  
 
 }

@@ -14,18 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.annomarket.cli.commands;
+package com.annomarket.cli.commands.job;
 
+import java.util.List;
+
+import com.annomarket.cli.commands.AbstractCommand;
 import com.annomarket.client.RestClient;
 import com.annomarket.job.Job;
 import com.annomarket.job.JobManager;
-import com.annomarket.job.JobState;
+import com.annomarket.job.Output;
+import com.annomarket.job.OutputType;
 
-public class JobDetails extends AbstractCommand {
+public class ListOutputs extends AbstractCommand {
 
   public void run(RestClient client, String... args) throws Exception {
     if(args.length < 1) {
-      System.err.println("Usage: job-details <jobid>");
+      System.err.println("Usage: list-inputs <jobid>");
       System.exit(1);
     }
     long jobId = -1;
@@ -38,31 +42,26 @@ public class JobDetails extends AbstractCommand {
 
     JobManager mgr = new JobManager(client);
     Job j = mgr.getJob(jobId);
-    renderJob(j);
-  }
-
-  private void renderJob(Job j) {
-    System.out.println("             ID: " + j.id);
-    System.out.println("           Name: " + j.name);
-    System.out.println("          State: " + j.state);
-    System.out.println("          Price: " + formatPrices(j.price));
-    System.out.println("   Date created: " + j.dateCreated);
-    if(j.state == JobState.COMPLETED) {
-      System.out.println(" Date completed: " + j.dateCompleted);
-      System.out.println("    Expiry date: " + j.resultsAvailableUntil);
+    List<Output> outputs = j.listOutputs();
+    if(outputs == null || outputs.isEmpty()) {
+      System.out.println("No outputs found");
+    } else {
+      System.out.println(outputs.size() + " output(s) found");
+      for(Output o : outputs) {
+        System.out.println();
+        System.out.println("          Detail URL: " + o.url);
+        System.out.println("                Type: " + o.type);
+        if(o.type == OutputType.MIMIR) {
+          System.out.println("           Index URL: " + o.indexUrl);
+          if(o.username != null) {
+            System.out.println("            Username: " + o.username);
+          }
+        } else {
+          System.out.println("      File extension: " + o.fileExtension);
+          System.out.println("Annotation selectors: " + o.annotationSelectors);
+        }
+      }
     }
-    if(j.timeUsed > 0) {
-      System.out.println("Processing time: " + formatMs(j.timeUsed)
-              + " (charged " + formatMs(j.timeCharged) + " so far)");
-    }
-    if(j.bytesUsed > 0) {
-      System.out.println(" Data processed: " + formatBytes(j.bytesUsed)
-              + " (charged " + formatBytes(j.bytesCharged) + " so far)");
-    }
-    if(j.progress > 0) {
-      System.out.println("   Job progress: " + formatPercent(j.progress));
-    }
-
   }
 
 }
