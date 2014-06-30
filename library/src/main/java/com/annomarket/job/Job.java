@@ -609,8 +609,12 @@ public class Job extends JobSummary {
    * @return a data bundle containing this job's results.
    */
   public DataBundle resultBundle() {
-    return client.get(resultBundle, new TypeReference<DataBundle>() {
-    });
+    if(resultBundle == null) {
+      return null;
+    } else {
+      return client.get(resultBundle, new TypeReference<DataBundle>() {
+      });
+    }
   }
 
   /**
