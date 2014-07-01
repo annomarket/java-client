@@ -65,4 +65,14 @@ public enum InputType {
    * one per Tweet, concatenated together with no separators).
    */
   TWITTER_STREAM,
+
+  /**
+   * JSON in the streaming-style format produced by DataSift (a sequence
+   * of JSON objects, one per item, concatenated together). This format
+   * works with the <a href=
+   * "http://dev.datasift.com/docs/getting-started/data/interaction"
+   * >interaction format</a>, which maps the common fields across
+   * different social media sources into a common representation.
+   */
+  DATASIFT_STREAM,
 }
