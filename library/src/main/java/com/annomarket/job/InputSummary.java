@@ -19,6 +19,7 @@ package com.annomarket.job;
 
 import com.annomarket.common.ApiObject;
 import com.annomarket.common.InputType;
+import com.annomarket.data.DataBundle;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 /**
@@ -44,10 +45,31 @@ public class InputSummary extends ApiObject {
   public String location;
 
   /**
+   * URL of the data bundle that acts as the source of this input
+   * specification. If this property is non-null then all the other
+   * details will be <code>null</code> as they are derived from the
+   * bundle.
+   */
+  public String sourceBundle;
+
+  /**
    * Fetch the full details of this input specification from the server.
    */
   public InputDetails details() {
     return client.get(url, new TypeReference<InputDetails>() {
     });
+  }
+
+  /**
+   * Get the {@link DataBundle} that is the source of this input, or
+   * <code>null</code> if this input is not derived from a bundle.
+   */
+  public DataBundle sourceBundle() {
+    if(sourceBundle == null) {
+      return null;
+    } else {
+      return client.get(sourceBundle, new TypeReference<DataBundle>() {
+      });
+    }
   }
 }

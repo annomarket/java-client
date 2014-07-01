@@ -189,6 +189,23 @@ public class Job extends JobSummary {
   }
 
   /**
+   * Add an input specification to this job, taking input from a data
+   * bundle. All configuration parameters for the input specification
+   * are taken from the bundle.
+   * 
+   * @param bundleId the ID of the input bundle.
+   * @return details of the newly-created input specification.
+   */
+  public InputDetails addBundleInput(long bundleId) {
+    ObjectNode request = JsonNodeFactory.instance.objectNode();
+    request.put("sourceBundle", bundleId);
+    // create the input
+    return client.post(url + "/input", new TypeReference<InputDetails>() {
+    }, request);
+
+  }
+
+  /**
    * Upload a local "archive" file (zip, tar{.gz|.bz2}, or a Twitter
    * search result or stream of Tweets) as input to this job.
    * 
