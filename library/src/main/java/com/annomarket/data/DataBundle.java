@@ -19,6 +19,7 @@ package com.annomarket.data;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -129,8 +130,31 @@ public class DataBundle extends DataBundleSummary {
    *          bundle.
    */
   public void addFile(File inputFile) {
+    InputStream source = null;
+    try {
+      source = new FileInputStream(inputFile);
+      addFile(inputFile.getName(), (int)inputFile.length(), source);
+    } catch(IOException e) {
+      throw new RestClientException(e);
+    } finally {
+      IOUtils.closeQuietly(source);
+    }
+  }
+
+  /**
+   * Upload a file to an open bundle.
+   * 
+   * @param fileName the name to use for the bundle entry
+   * @param contentLength the number of bytes to upload
+   * @param source an input stream from which the file's content can be
+   *          read. It must provide exactly <code>contentLength</code>
+   *          bytes up to end-of-file. The stream will be read to EOF
+   *          but will not be closed by this method, the caller is
+   *          responsible for ensuring the stream is properly closed.
+   */
+  public void addFile(String fileName, int contentLength, InputStream source) {
     ObjectNode request = JsonNodeFactory.instance.objectNode();
-    request.put("fileName", inputFile.getName());
+    request.put("fileName", fileName);
     // create the input
     AddResult addRes =
             client.post(url + "/add", new TypeReference<AddResult>() {
@@ -143,19 +167,16 @@ public class DataBundle extends DataBundleSummary {
       putConnection.setRequestMethod("PUT");
       putConnection.setRequestProperty("Content-Type",
               "application/octet-stream");
-      putConnection.setFixedLengthStreamingMode((int)inputFile.length());
-      FileInputStream in = new FileInputStream(inputFile);
+      putConnection.setFixedLengthStreamingMode(contentLength);
       OutputStream out = putConnection.getOutputStream();
       try {
-        IOUtils.copy(in, out);
+        IOUtils.copy(source, out);
       } finally {
-        IOUtils.closeQuietly(in);
         IOUtils.closeQuietly(out);
       }
     } catch(IOException e) {
       throw new RestClientException(e);
     }
-
   }
 
   private static class AddResult {
@@ -167,9 +188,10 @@ public class DataBundle extends DataBundleSummary {
    */
   public void close() {
     // has to be a POST request, but any body will do
-    client.postForUpdate(url + "/close", this, JsonNodeFactory.instance.objectNode());
+    client.postForUpdate(url + "/close", this,
+            JsonNodeFactory.instance.objectNode());
   }
-  
+
   /**
    * Delete this bundle, which also deletes any contained files that are
    * stored in the default AnnoMarket-managed location.
