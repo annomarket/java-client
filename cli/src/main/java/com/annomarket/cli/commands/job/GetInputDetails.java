@@ -53,8 +53,14 @@ public class GetInputDetails extends AbstractCommand {
               + (input.commonCrawl.complete
                       ? "(search complete)"
                       : "so far (still searching)"));
+    } else if(input.sourceBundle != null) {
+      // this is a data bundle input
+      System.out.println();
+      System.out.println("This output is derived from a data bundle, for details use");
+      System.out.println();
+      System.out.println("  bundle-details " + input.sourceBundle);
     } else {
-      // not common crawl
+      // normal input
       System.out.println("              Type: " + input.type);
       System.out.println("          Location: " + input.location);
       if(input.encoding != null) {
