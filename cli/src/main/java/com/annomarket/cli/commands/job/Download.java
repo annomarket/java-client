@@ -32,17 +32,18 @@ public class Download extends AbstractCommand {
   public void run(RestClient client, String... args) throws Exception {
     if(args.length < 1) {
       System.err.println("Usage: download <URL>");
-      JobResult res = new JobResult(new URL(args[0]));
-      res.setClient(client);
-      String path = res.url.getPath();
-      String filename = path.substring(path.lastIndexOf("/") + 1);
-      System.out.println(filename);
-      File f = new File(filename);
-      try {
-        FileUtils.copyURLToFile(res.urlToDownload(), f);
-      } catch(IOException e) {
-        throw new RestClientException("Error downloading " + res.url);
-      }
+      System.exit(1);
+    }
+    JobResult res = new JobResult(new URL(args[0]));
+    res.setClient(client);
+    String path = res.url.getPath();
+    String filename = path.substring(path.lastIndexOf("/") + 1);
+    System.out.println(filename);
+    File f = new File(filename);
+    try {
+      FileUtils.copyURLToFile(res.urlToDownload(), f);
+    } catch(IOException e) {
+      throw new RestClientException("Error downloading " + res.url);
     }
   }
 
