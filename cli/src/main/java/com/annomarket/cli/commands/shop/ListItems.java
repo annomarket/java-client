@@ -32,16 +32,16 @@ public class ListItems extends AbstractCommand {
     if(items == null || items.isEmpty()) {
       System.out.println("No items found");
     } else {
-      // ID (6 cols), Name (32 cols), price (rest)
+      // ID (6 cols), Name (42 cols), price (rest)
       System.out.println("    ID  Name                              Price");
       System.out.println("----------------------------------------------------------");
       Formatter f = new Formatter(System.out);
       for(Item i : items) {
         String name = i.name;
-        if(name.length() > 32) {
-          name = name.substring(0,29) + "...";
+        if(name.length() > 42) {
+          name = name.substring(0,39) + "...";
         }
-        f.format("%6d  %-32s  %s%n", i.id, name, formatPrices(i.price));
+        f.format("%6d  %-42s  %s%n", i.id, name, formatPrices(i.price));
       }
       f.close();
     }
