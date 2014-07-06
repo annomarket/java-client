@@ -86,7 +86,7 @@ public class UploadBundle extends AbstractCommand {
     }
     System.out.println("Closing bundle...");
     newBundle.close();
-    System.out.println("Done");
+    System.out.println("Bundle " + newBundle.id + " uploaded");
   }
 
   private void usage() {
