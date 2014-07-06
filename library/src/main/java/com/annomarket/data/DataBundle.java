@@ -103,11 +103,8 @@ public class DataBundle extends DataBundleSummary {
   public String mimeTypeFilters;
 
   /**
-   * Files in this bundle.
-   * 
-   * @return a list of files, call <code>urlToDownload</code> on each
-   *         entry to get a (time-limited) URL from which the file can
-   *         be downloaded.
+   * Files in this bundle. Call <code>urlToDownload</code> on each entry
+   * to get a (time-limited) URL from which the file can be downloaded.
    */
   public List<BundleEntry> files;
 

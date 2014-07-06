@@ -18,6 +18,7 @@ package com.annomarket.common;
 
 import com.annomarket.client.RestClient;
 import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Common superclass for all objects that represent API responses that

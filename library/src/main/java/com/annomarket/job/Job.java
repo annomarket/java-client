@@ -544,7 +544,7 @@ public class Job extends JobSummary {
 
   /**
    * Stop the execution of this job. The job must be in the
-   * {@link JobState#RUNNING RUNNING} state or this operation will fail.
+   * {@link JobState#ACTIVE ACTIVE} state or this operation will fail.
    */
   public void stop() {
     control("stop");
