@@ -46,6 +46,8 @@ public class InputFromBundle extends AbstractCommand {
       System.err.println("Bundle ID must be a valid number");
       System.exit(1);
     }
+    
+    System.out.println("Configuring job " + jobId + " to take input from bundle " + bundleId);
 
     JobManager mgr = new JobManager(client);
     Job job = mgr.getJob(jobId);
